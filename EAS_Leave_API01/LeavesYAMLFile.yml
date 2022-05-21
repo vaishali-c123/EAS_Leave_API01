@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  EAS_Leave_API01-deployment
+  labels:
+    app:  EAS_Leave_API01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  EAS_Leave_API01
+  template:
+    metadata:
+      labels:
+        app:  EAS_Leave_API01
+    spec:
+      containers:
+      - name: leavescr
+        image: leavescr.azurecr.io/easleavesrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: webapisvcsecretkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: EAS_Leave_API01svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app:  EAS_Leave_API01
